@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<title>Explore</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1 {font-family: "Montserrat", sans-serif}
+img {margin-bottom: -7px}
+.w3-row-padding img {margin-bottom: 12px}
+
+
+
+
+
+
+
+</style>
+
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+
+
+</style>
+
+<style>
+input[type=text] {
+    width: auto;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('https://cdn1.iconfinder.com/data/icons/hawcons/32/698627-icon-111-search-512.png');
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+}
+
+
+</style>
+
+<head>
+
+</head>
+
+<body onload="getMostActiveUsers(); getRecommendations(); popularTags();">
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-black w3-animate-top w3-xxlarge" style="display:none;padding-top:150px" id="mySidebar">
+    <a href="javascript:void(0)" onclick="w3_close()"
+       class="w3-button w3-black w3-xxlarge w3-padding w3-display-topright" style="padding:6px 24px">
+        <i class="fa fa-remove"></i>
+    </a>
+    <div class="w3-bar-block w3-center">
+        <a href="/explore" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Explore</a>
+        <a href="/search" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Search</a>
+        <a href="/profile" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Profile</a>
+        <a href="/albums" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Albums</a>
+        <a href="/photos" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Photos</a>
+        <a href="/upload" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Upload</a>
+        <a href="/logout" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Logout</a>
+    </div>
+</nav>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-content" style="max-width:1500px">
+
+    <!-- Header -->
+    <div class="w3-opacity">
+        <span class="w3-button w3-xxlarge w3-white w3-right" onclick="w3_open()"><i class="fa fa-bars"></i></span>
+        <div class="w3-clear"></div>
+        <header class="w3-center w3-margin-bottom">
+            <h1><b>Search</b></h1>
+        </header>
+    </div>
+
+</div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-content" style="max-width:1500px">
+
+    <h3>Search Photos</h3>
+    <form>
+        By Tag: <input type='text' name='query1' id='tag' placeholder='Search...'>
+        <button type="submit" onclick="searchByTag()">Search</button>
+    </form>
+    <br/>
+    <form>
+        By User: <input type='text' name='query2' id='user_email' placeholder='Search...'>
+        <button type="submit" onclick="searchByUser()">Search</button>
+    </form>
+    <br/>
+    <form>
+        By Album: <input type='text' name='query3' id='a_name' placeholder='Search...'>
+        <button type="submit" onclick="searchByAlbum()">Search</button>
+    </form>
+    <br/>
+
+
+    <div class="w3-row w3-container">
+        {% if results %}
+        <h2>Search Results</h2>
+        <ul>
+            {% for photo in photos %}
+
+            <div class="w3-row" id="myGrid1" style="margin-bottom:128px">
+                <div class="w3-third">
+                    <img src='data:image/png;base64, {{photo[0].decode(utf8)}}' style="width:100%">
+                </div>
+
+                <div class="w3-third">
+                    <img src='data:image/png;base64, {{photo[0].decode(utf8)}}' style="width:100%">
+                </div>
+
+                <div class="w3-third">
+                    <img src='data:image/png;base64, {{photo[0]}}' style="width:100%">
+                </div>
+            </div>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <div class="w3-col s10 w3-white w3-center">
+            {% if ownphotos %}
+            <h2>Search Own Photos</h2>
+            <form>
+                By Tag: <input type='text' name='query1' id='own_photos' placeholder='Search...'>
+                <button type="submit" onclick="searchOwnPicturesByTag()">Search</button>
+            </form>
+            <br/>
+            {% if ownsearch %}
+            <ul>
+                {% for result in ownsearch %}
+
+                <div class="w3-row" id="myGrid2" style="margin-bottom:128px">
+                    <div>
+                        <img src="data:image/png;base64, {{photo[0].decode('utf8')}}" style="width:25%">
+                    </div>
+                </div>
+                {% endfor %}
+            </ul>
+
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- End Page Content -->
+</div>
+
+<!-- Footer -->
+<footer class="w3-container w3-padding-64 w3-light-grey w3-center w3-opacity w3-xlarge" style="margin-top:128px">
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-snapchat w3-hover-opacity"></i>
+    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+    <i class="fa fa-twitter w3-hover-opacity"></i>
+    <i class="fa fa-linkedin w3-hover-opacity"></i>
+    <p class="w3-medium">Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank"
+                                       class="w3-hover-text-green">w3.css</a></p>
+</footer>
+
+<script>
+  // Open and close sidebar
+function w3_open() {
+    document.getElementById("mySidebar").style.width = "100%";
+    document.getElementById("mySidebar").style.display = "block";
+}
+
+function w3_close() {
+    document.getElementById("mySidebar").style.display = "none";
+}
+
+
+
+</script>
+
+</body>
+</html>

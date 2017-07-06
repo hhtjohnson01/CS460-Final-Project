@@ -1,0 +1,118 @@
+<!-- author ben lawson (balawson@bu.edu) -->
+<!DOCTYPE html>
+<html>
+<title>Upload</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1 {font-family: "Montserrat", sans-serif}
+img {margin-bottom: -7px}
+.w3-row-padding img {margin-bottom: 12px}
+</style>
+
+<head>
+
+</head>
+<body>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-black w3-animate-top w3-xxlarge" style="display:none;padding-top:150px" id="mySidebar">
+    <a href="javascript:void(0)" onclick="w3_close()"
+       class="w3-button w3-black w3-xxlarge w3-padding w3-display-topright" style="padding:6px 24px">
+        <i class="fa fa-remove"></i>
+    </a>
+    <div class="w3-bar-block w3-center">
+        <a href="/explore" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Explore</a>
+        <a href="/search" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Search</a>
+        <a href="/profile" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Profile</a>
+        <a href="/albums" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Albums</a>
+        <a href="/photos" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Photos</a>
+        <a href="/upload" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Upload</a>
+        <a href="/logout" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Logout</a>
+    </div>
+</nav>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-content" style="max-width:1500px">
+
+    <!-- Header -->
+    <div class="w3-opacity">
+        <span class="w3-button w3-xxlarge w3-white w3-right" onclick="w3_open()"><i class="fa fa-bars"></i></span>
+        <div class="w3-clear"></div>
+        <header class="w3-center w3-margin-bottom">
+            <h1><b>Photos</b></h1>
+        </header>
+
+        <div class="w3-row w3-container">
+            <div class="title">
+                <h1>Upload a photo.</h1>
+            </div>
+            <form method="post" enctype="multipart/form-data" action="/upload">
+                <label for="photo">Select photo:</label>
+                <input type="file" name="photo" required='true'/><br/>
+                <label for="album">Select Album:</label>
+                {% if albums %}
+                <select name="album" required='true' style="width: 10%">
+                    {% for album in albums %}
+                    <option SELECTED>{{ album[0] }}</option>
+                    {% endfor %}
+                </select>
+                {% else %}
+                     <a href="/albums"> Create an album first!</a>
+                {% endif %}
+
+            <br/>
+                <label for="caption">Please caption:</label>
+                <input type="text" name="caption" required='true'/><br/>
+
+                <label for="tag1">Add first tag:</label>
+                <input type="text" name="tag1" required='true'/><br/>
+                <label for="tag2">Add second tag:</label>
+                <input type="text" name="tag2" required='true'/><br/>
+                <label for="tag3">Add third tag:</label>
+                <input type="text" name="tag3" required='true'/><br/>
+                <label for="tag4">Add fourth tag:</label>
+                <input type="text" name="tag4" required='true'/><br/>
+                <input type="submit" value="Upload"/>
+            </form>
+
+
+            <!-- End Page Content -->
+
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="w3-container w3-padding-64 w3-light-grey w3-center w3-opacity w3-xlarge" style="margin-top:128px">
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-snapchat w3-hover-opacity"></i>
+    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+    <i class="fa fa-twitter w3-hover-opacity"></i>
+    <i class="fa fa-linkedin w3-hover-opacity"></i>
+    <p class="w3-medium">Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank"
+                                       class="w3-hover-text-green">w3.css</a></p>
+</footer>
+
+<script>
+  // Open and close sidebar
+function w3_open() {
+    document.getElementById("mySidebar").style.width = "100%";
+    document.getElementById("mySidebar").style.display = "block";
+}
+
+function w3_close() {
+    document.getElementById("mySidebar").style.display = "none";
+}
+
+
+
+
+</script>
+
+</body>
+</html>

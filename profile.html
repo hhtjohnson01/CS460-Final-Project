@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<title>Profile</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1 {font-family: "Montserrat", sans-serif}
+img {margin-bottom: -7px}
+.w3-row-padding img {margin-bottom: 12px}
+
+</style>
+<style>
+#stats {
+    width: 100%;
+    padding: 50px 0;
+    text-align: center;
+    background-color: lightblue;
+    margin-top:20px;
+}
+
+</style>
+
+<head>
+
+</head>
+<body onload="getFriends()">
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-black w3-animate-top w3-xxlarge" style="display:none;padding-top:150px" id="mySidebar">
+    <a href="javascript:void(0)" onclick="w3_close()"
+       class="w3-button w3-black w3-xxlarge w3-padding w3-display-topright" style="padding:6px 24px">
+        <i class="fa fa-remove"></i>
+    </a>
+    <div class="w3-bar-block w3-center">
+        <a href="/explore" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Explore</a>
+        <a href="/search" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Search</a>
+        <a href="/profile" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Profile</a>
+        <a href="/albums" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Albums</a>
+        <a href="/photos" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Photos</a>
+        <a href="/upload" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Upload</a>
+        <a href="/logout" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Logout</a>
+    </div>
+</nav>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-content" style="max-width:1500px">
+
+    <!-- Header -->
+    <div class="w3-opacity">
+        <span class="w3-button w3-xxlarge w3-white w3-right" onclick="w3_open()"><i class="fa fa-bars"></i></span>
+        <div class="w3-clear"></div>
+        <header class="w3-center w3-margin-bottom">
+            <p><b>{% if bio %}
+                {% for data in bio %}
+                <h1><b>{{ data[0] }} {{ data[1] }}</b></h1>
+                {% endfor %}
+                {% else %}
+                <h1><b>{{ email }}</b></h1>
+                {% endif %}</b></p>
+        </header>
+    </div>
+
+    <div class="w3-row s6 w3-container w3-center">
+        <h2>MiniBio</h2>
+        <table align="center">
+            {% if bio %}
+            {% for data in bio %}
+            <tr>
+                <td>Name: {{data[0]}} {{data[1]}}</td>
+            </tr>
+            <tr>
+                <td>Email: {{data[5]}}</td>
+            </tr>
+            <tr>
+                <td>Gender: {{data[2]}}</td>
+            </tr>
+            <tr>
+                <td>Hometown: {{data[3]}}</td>
+            </tr>
+            <tr>
+                <td>Birthday: {{data[4]}}</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+    <br/>
+
+    <div class="w3-row w3-container w3-center">
+        <div class="w3-col s2 w3-white w3-center">
+            <h3>Friends List</h3>
+            {% if friends %}
+            <ul>
+                {% for friend in friends %}
+                <li>{{ friend }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <h4>You don't have any friends.</h4>
+            <p>Add some on the <a href="/explore"> Explore </a> page!</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="w3-row w3-container">
+        <button onclick="toggleStats()">Personal Stats</button>
+
+        <div id="stats">
+            <table align="center">
+                <tr>
+                    <td>Number of Photos: {{ p_count }}</td>
+                    <td>Number of Comments: {{ c_count }}</td>
+                </tr>
+                <tr>
+                    <td>Number of Friends: {{ f_count }}</td>
+                    <td>Most Used Tags: {{ pop_tag1 }}, {{ pop_tag2 }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div>
+        <a href='/logout'>Logout</a>
+    </div>
+    <!-- End Page Content -->
+</div>
+
+<!-- Footer -->
+<footer class="w3-container w3-padding-64 w3-light-grey w3-center w3-opacity w3-xlarge" style="margin-top:128px">
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-snapchat w3-hover-opacity"></i>
+    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+    <i class="fa fa-twitter w3-hover-opacity"></i>
+    <i class="fa fa-linkedin w3-hover-opacity"></i>
+    <p class="w3-medium">Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank"
+                                       class="w3-hover-text-green">w3.css</a></p>
+</footer>
+
+<script>
+  // Open and close sidebar
+function w3_open() {
+    document.getElementById("mySidebar").style.width = "100%";
+    document.getElementById("mySidebar").style.display = "block";
+}
+
+function w3_close() {
+    document.getElementById("mySidebar").style.display = "none";
+}
+
+
+</script>
+
+<script>
+function toggleStats() {
+    var x = document.getElementById('stats');
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+}
+
+
+
+
+</script>
+
+</body>
+</html>

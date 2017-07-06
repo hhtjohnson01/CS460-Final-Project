@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<title>Explore</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1 {font-family: "Montserrat", sans-serif}
+img {margin-bottom: -7px}
+.w3-row-padding img {margin-bottom: 12px}
+
+
+
+
+
+
+
+
+</style>
+
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+
+
+
+</style>
+
+<style>
+input[type=text] {
+    width: auto;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('https://cdn1.iconfinder.com/data/icons/hawcons/32/698627-icon-111-search-512.png');
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+}
+
+
+
+</style>
+
+<head>
+
+</head>
+
+<body onload="getMostActiveUsers(); getRecommendations(); popularTags();">
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-black w3-animate-top w3-xxlarge" style="display:none;padding-top:150px" id="mySidebar">
+    <a href="javascript:void(0)" onclick="w3_close()"
+       class="w3-button w3-black w3-xxlarge w3-padding w3-display-topright" style="padding:6px 24px">
+        <i class="fa fa-remove"></i>
+    </a>
+    <div class="w3-bar-block w3-center">
+        <a href="/explore" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Explore</a>
+        <a href="/search" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Search</a>
+        <a href="/profile" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Profile</a>
+        <a href="/albums" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Albums</a>
+        <a href="/photos" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Photos</a>
+        <a href="/upload" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Upload</a>
+        <a href="/logout" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Logout</a>
+    </div>
+</nav>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-content" style="max-width:1500px">
+
+    <!-- Header -->
+    <div class="w3-opacity">
+        <span class="w3-button w3-xxlarge w3-white w3-right" onclick="w3_open()"><i class="fa fa-bars"></i></span>
+        <div class="w3-clear"></div>
+        <header class="w3-center w3-margin-bottom">
+            <h1><b>Explore</b></h1>
+            <p><b>{% if name %}
+                <h1>Welcome, {{ name }}!</h1>
+                {% endif %}</b></p>
+        </header>
+    </div>
+
+</div>
+
+<div class="w3-row w3-container">
+    <div class="w3-col s6 w3-white w3-left">
+        <a href="/upload" class="w3-bar-item w3-button w3-text-grey w3-hover-black"><h3>Upload a Photo</h3></a>
+        <br/>
+
+        <h3>Popular Tags</h3>
+        <ul>
+            <li value="{{ pop_tag1 }}">{{ pop_tag1 }}</li>
+            <li value="{{ pop_tag2 }}">{{ pop_tag2 }}</li>
+            <li value="{{ pop_tag3 }}">{{ pop_tag3 }}</li>
+            <li value="{{ pop_tag4 }}">{{ pop_tag4 }}</li>
+        </ul>
+    </div>
+
+    <div class="w3-col s6 w3-white w3-right">
+        <h3>Most Active Users</h3>
+        <ul>
+            {% for email in activity_score %}
+            <li value="{{ activity_score.email }}">{{ email }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Add Friends</h3>
+        <form method='POST' name="f_email">
+
+            <div class="container">
+                <label><b>Email: </b></label>
+                <input type='text' name='f_email' id='f_email' placeholder='Search by email...'>
+                <br/>
+                <p></p>
+                <br/>
+                <button type="submit" onclick="addFriend()">Add friend by email</button>
+            </div>
+        </form>
+    </div>
+</div>
+<br/>
+<div class="w3-col w3-white w3-center">
+    {% if photos %}
+    <h2>Recommended Photos</h2>
+    <ul>
+        <div id="id01" class="modal">
+        <form class="modal-content animate" name="photo_modal">
+            <div class="imgcontainer">
+                        <span onclick="document.getElementById('id01').style.display='none'" class="close"
+                              title="Close Modal">&times;</span>
+            </div>
+            {% for photo in recommendations %}
+            <div class="container" onclick="getLikes({{photo[1]}})">
+                <img src="data:image/png;base64, {{photo[0].decode('utf-8')}}" style="width: 50%">
+                <br/>
+                <label><b>{{photo[1]}}</b></label>
+                <br/>
+                {{photo[2]}}, {{photo[3]}}, {{photo[4]}}, {{photo[5]}}, {{photo[6]}}, {{photo[7]}},
+                {{photo[8]}}, {{photo[9]}}
+                {% if likes %} {{likes}} {% endif %}
+                <input type="image" src="/static/like.png"
+                       style="width:5%" onclick="checkLikes({{photo[1]}}); like({{photo[1]}})"/>
+                <input type='text' name='comment' id='comment' placeholder='Comment'>
+
+                <button type="submit" onclick="comment()">Submit</button>
+            </div>
+            {% endfor %}
+        </form>
+        </div>
+    </ul>
+
+    {% endif %}
+
+</div>
+
+<!-- Footer -->
+<footer class="w3-container w3-padding-64 w3-light-grey w3-center w3-opacity w3-xlarge" style="margin-top:128px">
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-snapchat w3-hover-opacity"></i>
+    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+    <i class="fa fa-twitter w3-hover-opacity"></i>
+    <i class="fa fa-linkedin w3-hover-opacity"></i>
+    <p class="w3-medium">Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank"
+                                       class="w3-hover-text-green">w3.css</a></p>
+</footer>
+
+<script>
+  // Open and close sidebar
+function w3_open() {
+    document.getElementById("mySidebar").style.width = "100%";
+    document.getElementById("mySidebar").style.display = "block";
+}
+
+function w3_close() {
+    document.getElementById("mySidebar").style.display = "none";
+}
+
+
+
+
+</script>
+<script>
+// Get the modal
+var modal = document.getElementById('id01');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+
+
+
+
+</script>
+
+</body>
+</html>
